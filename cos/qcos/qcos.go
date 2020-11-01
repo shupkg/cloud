@@ -4,12 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/shupkg/cloud/cos"
+	"github.com/shupkg/cloud/utils/iox"
 	"io"
 	"net/http"
 	"net/url"
-
-	"github.com/shupkg/cloud/cos"
-	"github.com/shupkg/cloud/utils/iox"
 
 	q "github.com/tencentyun/cos-go-sdk-v5"
 )
@@ -40,6 +39,15 @@ func (s *Service) getClient() *q.Client {
 			},
 		},
 	)
+}
+
+//获取预签名URL
+func (s *Service) GetPreSignedURL(ctx context.Context, options cos.GetPreSignedURLOptions) (string, error) {
+	u, err := s.getClient().Object.GetPresignedURL(ctx, options.Method, options.Name, options.AK, options.SK, options.ExpiredIn, nil)
+	if err != nil {
+		return "", err
+	}
+	return u.String(), nil
 }
 
 //获取对象列表

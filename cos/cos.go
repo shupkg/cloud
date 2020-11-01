@@ -6,6 +6,8 @@ import (
 )
 
 type Service interface {
+	GetPreSignedURL(ctx context.Context, options GetPreSignedURLOptions) (string, error)
+	ListObjects(ctx context.Context, options ListObjectsOptions) (ListObjectsResult, error)
 	GetObject(ctx context.Context, name string) (io.ReadCloser, error)
 	DownloadObject(ctx context.Context, key, saveTo string) error
 	PutObject(ctx context.Context, name string, src io.Reader) error
