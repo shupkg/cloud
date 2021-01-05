@@ -5,8 +5,24 @@ import (
 	"os"
 )
 
-func CopyToFile(src io.Reader, dist string) error {
-	fd, err := os.OpenFile(dist, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0660)
+func FileCopy(dst, src string) error {
+	srcF, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcF.Close()
+	dstF, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0660)
+	if err != nil {
+		return err
+	}
+	defer dstF.Close()
+
+	_, err = io.Copy(dstF, srcF)
+	return err
+}
+
+func ReadToFile(dst string, src io.Reader) error {
+	fd, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0660)
 	if err != nil {
 		return err
 	}
@@ -15,12 +31,12 @@ func CopyToFile(src io.Reader, dist string) error {
 	return err
 }
 
-func CopyFromFile(src string, dist io.Writer) error {
+func WriteFromFile(dst io.Writer, src string) error {
 	fd, err := os.Open(src)
 	if err != nil {
 		return err
 	}
 	defer fd.Close()
-	_, err = io.Copy(dist, fd)
+	_, err = io.Copy(dst, fd)
 	return err
 }

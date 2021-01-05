@@ -43,7 +43,7 @@ func (s *Service) getClient() *q.Client {
 
 //获取预签名URL
 func (s *Service) GetPreSignedURL(ctx context.Context, options cos.GetPreSignedURLOptions) (string, error) {
-	u, err := s.getClient().Object.GetPresignedURL(ctx, options.Method, options.Name, options.AK, options.SK, options.ExpiredIn, nil)
+	u, err := s.getClient().Object.GetPresignedURL(ctx, options.Method, options.Name, s.SecretID, s.SecretKey, options.ExpiredIn, nil)
 	if err != nil {
 		return "", err
 	}
@@ -101,7 +101,7 @@ func (s *Service) DownloadObject(ctx context.Context, name, filepath string) err
 	if err != nil {
 		return s.checkError(err)
 	}
-	return iox.CopyToFile(body, filepath)
+	return iox.ReadToFile(filepath,body)
 }
 
 //简单上传对象, 上传一个 Object（文件/对象）至 Bucket

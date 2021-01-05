@@ -6,8 +6,6 @@ import "time"
 type GetPreSignedURLOptions struct {
 	Name      string        `json:"name,omitempty"`
 	Method    string        `json:"method,omitempty"`
-	AK        string        `json:"ak,omitempty"`
-	SK        string        `json:"sk,omitempty"`
 	ExpiredIn time.Duration `json:"expired_in,omitempty"`
 }
 
